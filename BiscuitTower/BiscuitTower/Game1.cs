@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using JairLib.TileGenerators;
 
 namespace BiscuitTower
 {
@@ -8,6 +9,9 @@ namespace BiscuitTower
     {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
+
+        private SpriteFont _font;
+        string seed;
 
         public Game1()
         {
@@ -27,6 +31,7 @@ namespace BiscuitTower
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
+            _font = Content.Load<SpriteFont>("PrettyPixelBIG");
             // TODO: use this.Content to load your game content here
         }
 
@@ -37,15 +42,28 @@ namespace BiscuitTower
 
             // TODO: Add your update logic here
 
+            var keyb = Keyboard.GetState();
+            if (keyb.IsKeyDown(Keys.Enter))
+            {
+                seed = SeedBuilder.TheStringGetsThisLength(16);
+            }
+
             base.Update(gameTime);
         }
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.Black);
 
             // TODO: Add your drawing code here
+            _spriteBatch.Begin();
 
+            if (!string.IsNullOrEmpty(seed))
+            {
+                _spriteBatch.DrawString(_font, seed, new Vector2(64, 64), Color.White);
+            }
+
+            _spriteBatch.End();
             base.Draw(gameTime);
         }
     }
