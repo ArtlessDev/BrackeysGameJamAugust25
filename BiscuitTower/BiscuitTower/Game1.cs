@@ -35,7 +35,7 @@ namespace BiscuitTower
 
             _font = Content.Load<SpriteFont>("PrettyPixelBIG");
 
-            seed = SeedBuilder.TheStringGetsThisLength(16);
+            seed = SeedBuilder.TheStringGetsThisLength(64);
 
             // TODO: use this.Content to load your game content here
         }
@@ -73,11 +73,13 @@ namespace BiscuitTower
             {
                 foreach (var item in gridSeed)
                 {
-                    int height  = Array.IndexOf(gridSeed, item) + 1;
-                    _spriteBatch.DrawString(_font, item, new Vector2(64, 64*height), Color.White);
+                    int height  = (32 * (Array.IndexOf(gridSeed, item) + 1)) + 64;
+                    _spriteBatch.DrawString(_font, item, new Vector2(64, height), Color.White);
 
                 }
             }
+
+            _spriteBatch.DrawString(_font, "press enter to generate a new seed", new Vector2(0, 32), Color.White);
 
             _spriteBatch.End();
             base.Draw(gameTime);
