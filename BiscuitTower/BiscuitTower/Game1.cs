@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using JairLib.TileGenerators;
+using System;
 
 namespace BiscuitTower
 {
@@ -12,6 +13,7 @@ namespace BiscuitTower
 
         private SpriteFont _font;
         string seed;
+        string[] gridSeed;
 
         public Game1()
         {
@@ -32,6 +34,9 @@ namespace BiscuitTower
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             _font = Content.Load<SpriteFont>("PrettyPixelBIG");
+
+            seed = SeedBuilder.TheStringGetsThisLength(16);
+
             // TODO: use this.Content to load your game content here
         }
 
@@ -45,7 +50,8 @@ namespace BiscuitTower
             var keyb = Keyboard.GetState();
             if (keyb.IsKeyDown(Keys.Enter))
             {
-                seed = SeedBuilder.TheStringGetsThisLength(16);
+                seed = SeedBuilder.TheSeedGetsSomeOnes(seed);
+                gridSeed = SeedBuilder.SplitTheSeedToAGrid(seed);
             }
 
             base.Update(gameTime);
@@ -60,7 +66,17 @@ namespace BiscuitTower
 
             if (!string.IsNullOrEmpty(seed))
             {
-                _spriteBatch.DrawString(_font, seed, new Vector2(64, 64), Color.White);
+                _spriteBatch.DrawString(_font, seed, new Vector2(8, 8), Color.DarkGreen);
+            }
+            
+            if (gridSeed != null)
+            {
+                foreach (var item in gridSeed)
+                {
+                    int height  = Array.IndexOf(gridSeed, item) + 1;
+                    _spriteBatch.DrawString(_font, item, new Vector2(64, 64*height), Color.White);
+
+                }
             }
 
             _spriteBatch.End();

@@ -22,22 +22,51 @@ namespace JairLib.TileGenerators
 
         public static string TheSeedGetsSomeOnes(string seed)
         {
-            var tempSeed = seed;
+            int[] tempSeed = new int[seed.Length];
+            var newSeed = "";
 
-            for (int i = 0; i <= seed.Length; i++)
+            for (int i = 0; i < seed.Length; i++)
             {
                 int rand = Random.Shared.Next(0, 10);
 
                 if (rand < 5)
                 {
                     ///IM AN IDIOT STRINGS ARE IMMUTABLE AHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH
-                    //tempSeed.cut
-                    //tempSeed.Insert;
-                    //tempSeed[i] = rand;
+                    tempSeed[i] = rand;
+                }
+                else
+                {
+                    tempSeed[i] = 0;
+                }
+                
+            }
+
+            foreach (var i in tempSeed)
+            {
+                newSeed += i;
+            }
+
+            return newSeed;
+        }
+
+        public static string[] SplitTheSeedToAGrid(string seed)
+        {
+            string[] gridSeed = new string[(int)Math.Sqrt(seed.Length)];
+
+            int splitbyThisAmount = (int)Math.Sqrt(seed.Length);
+            int splitterIndicator = 0;
+
+            foreach (var i in seed)
+            {
+                gridSeed[splitterIndicator] += i; 
+
+                if (gridSeed[splitterIndicator].Length == splitbyThisAmount)
+                {
+                    splitterIndicator++;
                 }
             }
 
-            return seed;
+            return gridSeed;
         }
     }
 }
