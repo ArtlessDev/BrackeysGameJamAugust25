@@ -1,8 +1,12 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework.Graphics;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MonoGame;
+using Microsoft.Xna.Framework;
+using MonoGame.Extended.Graphics;
 
 namespace JairLib.TileGenerators
 {
@@ -67,6 +71,32 @@ namespace JairLib.TileGenerators
             }
 
             return gridSeed;
+        }
+
+        public static void DrawThePlayer(SpriteBatch _spriteBatch, PlayerOverworld player)
+        {
+            player.texture = Globals.atlas[10];
+            _spriteBatch.Draw(player.texture, new Vector2(player.rectangle.X, player.rectangle.Y), player.color, 0f, new Vector2(1,1), new Vector2(1,1), player.flipper, 0f);
+        }
+
+        public static void DrawtheSeedGrid(SpriteBatch _spriteBatch, string[] gridSeed)
+        {
+            if (gridSeed != null)
+            {
+                foreach (var item in gridSeed)
+                {
+                    int height = (64 * (Array.IndexOf(gridSeed, item) + 1));
+                    foreach (var digit in item)
+                    {
+                        var xValue = (64 * (Array.IndexOf(item.ToCharArray(), digit) + 1));
+
+                        Texture2DRegion tile = Globals.atlas[digit - '0'];
+                        _spriteBatch.Draw(tile, new Vector2(xValue, height), Color.White);
+
+
+                    }
+                }
+            }
         }
     }
 }

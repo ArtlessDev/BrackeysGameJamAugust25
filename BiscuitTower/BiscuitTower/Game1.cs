@@ -3,6 +3,10 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using JairLib.TileGenerators;
 using System;
+using JairLib;
+using MonoGame.Extended.Input;
+using MonoGame.Extended;
+using MonoGame.Extended.Graphics;
 
 namespace BiscuitTower
 {
@@ -14,11 +18,13 @@ namespace BiscuitTower
         private SpriteFont _font;
         string seed;
         string[] gridSeed;
+        PlayerOverworld player;
 
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+            Globals.GlobalContent = Content;
             IsMouseVisible = true;
         }
 
@@ -34,8 +40,13 @@ namespace BiscuitTower
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             _font = Content.Load<SpriteFont>("PrettyPixelBIG");
+            
+            Globals.puzzleSet = Globals.GlobalContent.Load<Texture2D>("puzzleSet");
+            Globals.atlas = Texture2DAtlas.Create("Atlas/Cards", Globals.puzzleSet, 64, 64);
 
-            seed = SeedBuilder.TheStringGetsThisLength(64);
+            seed = SeedBuilder.TheStringGetsThisLength(Globals.PUZZLE_SIZE);
+
+            player = new PlayerOverworld();
 
             // TODO: use this.Content to load your game content here
         }
@@ -47,8 +58,12 @@ namespace BiscuitTower
 
             // TODO: Add your update logic here
 
-            var keyb = Keyboard.GetState();
-            if (keyb.IsKeyDown(Keys.Enter))
+            KeyboardExtended.Update();
+            Globals.keyb = KeyboardExtended.GetState();
+
+            player.Update(gameTime);
+
+            if (Globals.keyb.WasKeyPressed(Keys.Enter))
             {
                 seed = SeedBuilder.TheSeedGetsSomeOnes(seed);
                 gridSeed = SeedBuilder.SplitTheSeedToAGrid(seed);
@@ -62,24 +77,18 @@ namespace BiscuitTower
             GraphicsDevice.Clear(Color.Black);
 
             // TODO: Add your drawing code here
-            _spriteBatch.Begin();
+            _spriteBatch.Begin(samplerState: SamplerState.PointClamp);
 
             if (!string.IsNullOrEmpty(seed))
             {
                 _spriteBatch.DrawString(_font, seed, new Vector2(8, 8), Color.DarkGreen);
             }
-            
-            if (gridSeed != null)
-            {
-                foreach (var item in gridSeed)
-                {
-                    int height  = (32 * (Array.IndexOf(gridSeed, item) + 1)) + 64;
-                    _spriteBatch.DrawString(_font, item, new Vector2(64, height), Color.White);
 
-                }
-            }
+            SeedBuilder.DrawtheSeedGrid(_spriteBatch, gridSeed);
 
             _spriteBatch.DrawString(_font, "press enter to generate a new seed", new Vector2(0, 32), Color.White);
+
+            SeedBuilder.DrawThePlayer(_spriteBatch, player);
 
             _spriteBatch.End();
             base.Draw(gameTime);
