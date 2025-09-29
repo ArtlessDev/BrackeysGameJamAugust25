@@ -33,7 +33,7 @@ namespace JairLib.TileGenerators
             {
                 int rand = Random.Shared.Next(0, 10);
 
-                if (rand < 5)
+                if (rand < Globals.CountOfTiles)
                 {
                     ///IM AN IDIOT STRINGS ARE IMMUTABLE AHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH
                     tempSeed[i] = rand;
@@ -75,7 +75,6 @@ namespace JairLib.TileGenerators
 
         public static void DrawThePlayer(SpriteBatch _spriteBatch, PlayerOverworld player)
         {
-            player.texture = Globals.atlas[10];
             _spriteBatch.Draw(player.texture, new Vector2(player.rectangle.X, player.rectangle.Y), player.color, 0f, new Vector2(1,1), new Vector2(1,1), player.flipper, 0f);
         }
 
@@ -90,8 +89,9 @@ namespace JairLib.TileGenerators
                     {
                         var xValue = (64 * (Array.IndexOf(item.ToCharArray(), digit) + 1));
 
-                        Texture2DRegion tile = Globals.atlas[digit - '0'];
-                        _spriteBatch.Draw(tile, new Vector2(xValue, height), Color.White);
+                        TileSpace tileSpace = new TileSpace();
+                        tileSpace.texture = Globals.atlas[digit - '0'];
+                        _spriteBatch.Draw(tileSpace.texture, new Vector2(xValue, height), Color.White);
 
 
                     }

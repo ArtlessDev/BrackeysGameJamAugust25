@@ -1,0 +1,29 @@
+{
+    "textures":[
+        {
+            "smallGuy/SmallGuyWalk":{
+                "frame":{
+                    "x":0,
+                    "y":0
+                },
+                "size":{
+                    "x":0,
+                    "y":0
+                },
+                "offset":{
+                    "x":0,
+                    "y":0
+                },
+                "pivot":{
+                    "x":0,
+                    "y":0
+                },
+                "rotated": 0
+            }
+        }
+    ],
+    "meta": {
+        "dataformat": "monogame-extended",
+        "version": "1.2"
+    }
+}

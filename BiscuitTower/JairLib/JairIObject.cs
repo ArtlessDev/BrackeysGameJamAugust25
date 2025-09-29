@@ -24,3 +24,9 @@ public interface ITileObject
     public Rectangle rectangle { get; set; }
     public Color color { get; set; }
 }
+
+public enum PlayerState
+{
+    Walking,
+    Waiting,
+}
